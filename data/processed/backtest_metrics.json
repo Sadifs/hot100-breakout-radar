@@ -1,0 +1,46 @@
+{
+  "latest_chart": "2026-11-21",
+  "main_1990_2015_to_2016_2025": {
+    "train_songs": 9130,
+    "test_songs": 5350,
+    "train_positive_rate": 0.1537,
+    "test_positive_rate": 0.0421,
+    "mean_predicted": 0.0489,
+    "model": {
+      "roc_auc": 0.874,
+      "pr_auc": 0.378,
+      "precision_top50": 0.72
+    },
+    "baseline_debut_rank": {
+      "roc_auc": 0.597,
+      "pr_auc": 0.066,
+      "precision_top50": 0.12
+    }
+  },
+  "streaming_2013_2020_to_2021_2025": {
+    "train_songs": 3627,
+    "test_songs": 2834,
+    "train_positive_rate": 0.0736,
+    "test_positive_rate": 0.0275,
+    "mean_predicted": 0.0504,
+    "model": {
+      "roc_auc": 0.919,
+      "pr_auc": 0.425,
+      "precision_top50": 0.54
+    },
+    "baseline_debut_rank": {
+      "roc_auc": 0.612,
+      "pr_auc": 0.048,
+      "precision_top50": 0.1
+    }
+  },
+  "standardized_coefficients": {
+    "height_w3": 1.268,
+    "climb_w1_w3": 0.077,
+    "climb_w2_w3": 0.325,
+    "prior_songs": -0.946,
+    "prior_top10": 0.4,
+    "has_feature": 0.139,
+    "n_artists": 0.036
+  }
+}
