@@ -18,28 +18,52 @@ DATA = ROOT / 'data' / 'processed'
 REPO = 'https://github.com/Sadifs/hot100-breakout-radar'
 LINKEDIN = 'https://linkedin.com/in/sadaf-sarbazi'
 
-ACCENT = '#F2A541'      # amber: highlights, lead credits
-BLUE = '#5B8DEF'        # featured credits, secondary series
-GRID = 'rgba(255,255,255,0.08)'
+ACCENT = '#8B7CF6'      # violet: highlights, lead credits
+SLATE = '#7D8A99'       # muted slate: featured credits, secondary series
+GRADIENT = ['#2F2A5C', '#5B4FC4', '#8B7CF6', '#C9A7FF']   # deep indigo -> soft orchid, low -> high
+GRID = 'rgba(255,255,255,0.06)'
 
-st.set_page_config(page_title='Hot 100 Breakout Radar', page_icon='📈', layout='wide')
+st.set_page_config(page_title='Hot 100 Breakout Radar', layout='wide')
 st.markdown("""
 <style>
-  .block-container {padding-top: 2.2rem; max-width: 1200px;}
-  [data-testid="stMetricValue"] {font-size: 1.8rem;}
-  [data-testid="stMetricLabel"] p {color: #A9ADB5;}
-  .hero {font-size: 2.9rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.2rem; padding-bottom: 0;
-         color: #E8E6E3 !important;}
-  .hero .accent {color: #F2A541 !important;}
-  .hero a {display: none;}
-  .tagline {font-size: 1.15rem; color: #C9CCD1; margin-top: 0.1rem; margin-bottom: 1.2rem;}
-  [data-testid="stMetric"] {background: #161A22;}
-  button[data-baseweb="tab"] p {font-size: 1.02rem; font-weight: 600;}
-  [data-testid="stTabs"] {margin-top: 0.8rem;}
-  h3 {border-left: 4px solid #F2A541; padding-left: 0.6rem !important;}
-  .footer {color: #8A8F98; font-size: 0.85rem; margin-top: 2rem; padding-top: 1rem;
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  .block-container {padding-top: 2.6rem; padding-bottom: 3rem; max-width: 1140px;}
+  .stMarkdown, .stMarkdown p, .stMarkdown li, .stCaption, [data-testid="stCaptionContainer"], h1, h2, h3,
+  [data-testid="stMetricLabel"], [data-testid="stMetricValue"], button[data-baseweb="tab"] p,
+  .stSelectbox label, .stTextInput label {font-family: 'Inter', sans-serif !important;}
+
+  .hero {font-size: 3rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; margin: 0; padding: 0;
+         color: #EEEDF2 !important;}
+  .hero .accent {background: linear-gradient(90deg, #8B7CF6 0%, #C9A7FF 100%); -webkit-background-clip: text;
+                 background-clip: text; color: transparent !important;}
+  .hero a, h3 a {display: none !important;}
+  .eyebrow {font-size: 0.76rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #A99CFA;
+            margin-bottom: 0.5rem;}
+  .tagline {font-size: 1.1rem; color: #B5B7C2; margin: 0.7rem 0 1.6rem 0; max-width: 700px; line-height: 1.6;}
+  h3 {font-weight: 650 !important; font-size: 1.45rem !important; letter-spacing: -0.02em;}
+
+  /* stat row: no boxes, thin rules */
+  [data-testid="stMetric"] {background: transparent; border-top: 1px solid rgba(255,255,255,0.10); border-radius: 0;
+                            padding-top: 0.9rem;}
+  [data-testid="stMetricValue"] {font-size: 2rem; font-weight: 600; letter-spacing: -0.02em;}
+  [data-testid="stMetricLabel"] p {color: #9A9DA8; font-size: 0.84rem;}
+  [data-testid="stMetricDelta"] {background: transparent !important; padding-left: 0 !important; color: #9A9DA8 !important;}
+
+  /* tabs */
+  [data-testid="stTabs"] {margin-top: 1.6rem;}
+  button[data-baseweb="tab"] p {font-size: 0.97rem; font-weight: 500; color: #A9ACB7;}
+  button[data-baseweb="tab"][aria-selected="true"] p {color: #EEEDF2;}
+
+  [data-testid="stExpander"] details {border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; background: transparent;}
+  [data-testid="stExpander"] summary p {font-size: 0.92rem; color: #B5B7C2;}
+
+  .stMarkdown p.pullquote {font-size: 1.25rem; font-weight: 500; line-height: 1.55; color: #EEEDF2;
+                           margin: 1.4rem 0 0.6rem 0; max-width: 820px; letter-spacing: -0.01em;}
+  .pullquote b {color: #B9AEFB;}
+  .footer {color: #7C7F8A; font-size: 0.82rem; margin-top: 3rem; padding-top: 1rem;
            border-top: 1px solid rgba(255,255,255,0.08);}
-  .footer a {color: #C9CCD1;}
+  .footer a {color: #B5B7C2; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.2);}
 </style>
 """, unsafe_allow_html=True)
 
@@ -80,7 +104,7 @@ def fmt_date(x):
 
 def style(fig, height=380):
     fig.update_layout(height=height, margin=dict(l=10, r=10, t=10, b=10), paper_bgcolor='rgba(0,0,0,0)',
-                      plot_bgcolor='rgba(0,0,0,0)', font=dict(color='#E8E6E3', size=13),
+                      plot_bgcolor='rgba(0,0,0,0)', font=dict(color='#CFD0D8', size=13, family='Inter, sans-serif'),
                       legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='left', x=0, title=None),
                       hoverlabel=dict(bgcolor='#1A1E27'))
     fig.update_xaxes(gridcolor=GRID, zeroline=False)
@@ -112,11 +136,12 @@ model_hit = main_bt['model']['precision_top50']
 base_hit = main_bt['baseline_debut_rank']['precision_top50']
 
 # ---------------------------------------------------------------- header
-st.markdown('<h1 class="hero">Hot 100 <span class="accent">Breakout Radar</span></h1>', unsafe_allow_html=True)
+st.markdown('<div class="eyebrow">Billboard Hot 100  ·  1958 to today</div>'
+            '<h1 class="hero">Hot 100 <span class="accent">Breakout Radar</span></h1>', unsafe_allow_html=True)
 st.markdown('<p class="tagline">Spot the artists who are breaking out and the songs that could become hits next, '
             'using every Billboard Hot 100 chart since 1958.</p>', unsafe_allow_html=True)
 
-with st.expander('New here? Start with this 30-second guide', expanded=True):
+with st.expander('New to the charts? A 30-second guide', expanded=False):
     g1, g2 = st.columns(2, gap='large')
     with g1:
         st.markdown('''
@@ -140,15 +165,14 @@ A new artist or song quickly gaining popularity. Record labels' talent scouts (t
 ''')
 
 k1, k2, k3, k4 = st.columns(4)
-k1.metric('Latest chart week', fmt_date(counts['last']), border=True, height=128)
-k2.metric('New artists in the last 6 months', f'{len(breaking):,}', border=True, height=128)
-k3.metric('Songs that could break next', f'{len(watch):,}', border=True, height=128)
+k1.metric('Latest chart week', fmt_date(counts['last']))
+k2.metric('New artists in the last 6 months', f'{len(breaking):,}')
+k3.metric('Songs that could break next', f'{len(watch):,}')
 k4.metric('Past predictions that came true', f'{model_hit:.0%}',
           f'vs. {base_hit:.0%} by rule of thumb', delta_color='off', delta_arrow='off',
-          border=True, height=128, help='Of the 50 songs the model rated highest in a 2016-2025 test, the share that actually reached the top 10.')
+          help='Of the 50 songs the model rated highest in a 2016-2025 test, the share that actually reached the top 10.')
 
-tabs = st.tabs(['🔥 Breaking Now', '🔮 Could Break Next', '🎤 Artist Lookup', '📈 Song History', '✅ Does It Work?',
-               '🛠️ How It Was Built'])
+tabs = st.tabs(['Breaking Now', 'Could Break Next', 'Artist Lookup', 'Song History', 'Does It Work?', 'How It Was Built'])
 
 # ---------------------------------------------------------------- Breaking Now
 with tabs[0]:
@@ -180,11 +204,13 @@ with tabs[0]:
         top['label'] = top['song'] + '  –  ' + credit
         top['text'] = 'up ' + top['spots_gained'].astype(int).astype(str) + ', now #' + top['rank'].astype(int).astype(str)
         fig = px.bar(top.iloc[::-1], x='spots_gained', y='label', orientation='h', text='text',
-                     color_discrete_sequence=[ACCENT],
+                     color='spots_gained', color_continuous_scale=GRADIENT,
+                     range_color=[0, top['spots_gained'].max()],
                      hover_data={'artist_credit': True, 'rank': True, 'last_week': True, 'label': False, 'text': False},
                      labels={'spots_gained': 'Spots gained this week', 'label': '', 'rank': 'Now',
                              'last_week': 'Last week', 'artist_credit': 'Artist'})
-        fig.update_traces(textposition='outside', cliponaxis=False)
+        fig.update_traces(textposition='outside', cliponaxis=False, marker_line_width=0)
+        fig.update_layout(coloraxis_showscale=False, bargap=0.35)
         fig.update_xaxes(range=[0, top['spots_gained'].max() * 1.35], showticklabels=False, showgrid=False, title=None)
         show(style(fig, height=430))
 
@@ -238,7 +264,7 @@ with tabs[2]:
                 FROM credits c JOIN songs s USING (song_id) WHERE c.artist = ? ORDER BY s.debut_date''', [who])
     hist['Role'] = hist['role'].map({'lead': 'lead artist', 'featured': 'featured guest'})
     fig = px.scatter(hist, x='debut_date', y='peak_rank', color='Role', size='total_weeks', size_max=16,
-                     color_discrete_map={'lead artist': ACCENT, 'featured guest': BLUE},
+                     color_discrete_map={'lead artist': ACCENT, 'featured guest': SLATE},
                      hover_data={'song': True, 'artist_credit': True, 'total_weeks': True},
                      labels={'debut_date': 'Year the song came out', 'peak_rank': 'Highest spot reached',
                              'song': 'Song', 'artist_credit': 'Credit', 'total_weeks': 'Weeks on chart'})
@@ -299,9 +325,10 @@ with tabs[4]:
                       f"vs. {bt['baseline_debut_rank']['precision_top50']:.0%} with the rule of thumb", delta_color='off', delta_arrow='off')
             x2.metric('Songs tested', f"{bt['test_songs']:,}",
                       f"only {bt['test_positive_rate']:.1%} reached the top 10", delta_color='off', delta_arrow='off')
-    st.info(f"In plain terms: among newer songs that debuted outside the top 10, about 1 in "
-            f"{round(1 / main_bt['test_positive_rate'])} eventually made it. Of the 50 songs the model liked most, "
-            f"{round(model_hit * 50)} made it.")
+    st.markdown(
+        f'<p class="pullquote">Among newer songs that debuted outside the top 10, about <b>1 in '
+        f"{round(1 / main_bt['test_positive_rate'])}</b> eventually made it. Of the 50 songs the model liked most, "
+        f'<b>{round(model_hit * 50)}</b> made it.</p>', unsafe_allow_html=True)
 
     st.subheader('What makes a song more likely to break')
     coef = pd.DataFrame(metrics['standardized_coefficients'].items(), columns=['feature', 'coefficient'])
@@ -312,7 +339,7 @@ with tabs[4]:
     coef['feature'] = coef['feature'].map(names)
     coef['effect'] = coef['coefficient'].map(lambda v: 'makes a breakout more likely' if v > 0 else 'makes it less likely')
     fig = px.bar(coef.sort_values('coefficient'), x='coefficient', y='feature', orientation='h', color='effect',
-                 color_discrete_map={'makes a breakout more likely': ACCENT, 'makes it less likely': BLUE},
+                 color_discrete_map={'makes a breakout more likely': ACCENT, 'makes it less likely': SLATE},
                  labels={'coefficient': 'Strength of effect', 'feature': '', 'effect': ''})
     show(style(fig, height=360))
     st.caption('Longer bars matter more. Artists with lots of chart songs often have many album tracks that briefly '
