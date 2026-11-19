@@ -3,6 +3,8 @@
 Which artists are breaking, and which songs could break next? An A&R-style research tool built on every weekly
 Billboard Hot 100 chart from August 1958 to November 2026.
 
+**Live app:** [hot100-breakout-radar.streamlit.app](https://hot100-breakout-radar.streamlit.app)
+
 ## What it does
 
 Built so anyone can use it, with a 30-second guide for people new to the charts.
