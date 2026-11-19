@@ -389,7 +389,7 @@ songs.
   solo are split ("Sonny & Cher"). The new-artists list skips combined credits that include an established artist.
 - Double-sided singles appear the way Billboard printed them, so a song can show up both alone and as part of a pair
   ("Something" and "Come Together/Something").
-- Fewer songs climb into the top 10 today (about 3% recently vs. about 15% before 2016), partly because whole albums
+- Fewer songs climb into the top 10 today (about 3% recently vs. about 15% for 1990-2015 songs), partly because whole albums
   now chart at once through streaming.
 - The Hot 100 reacts more slowly than streaming, social media, or Shazam. A real label tool would combine all of them.
 ''')
