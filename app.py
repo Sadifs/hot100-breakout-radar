@@ -28,7 +28,15 @@ st.markdown("""
   .block-container {padding-top: 2.2rem; max-width: 1200px;}
   [data-testid="stMetricValue"] {font-size: 1.8rem;}
   [data-testid="stMetricLabel"] p {color: #A9ADB5;}
-  .tagline {font-size: 1.15rem; color: #C9CCD1; margin-top: -0.6rem;}
+  .hero {font-size: 2.9rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.2rem; padding-bottom: 0;
+         color: #E8E6E3 !important;}
+  .hero .accent {color: #F2A541 !important;}
+  .hero a {display: none;}
+  .tagline {font-size: 1.15rem; color: #C9CCD1; margin-top: 0.1rem; margin-bottom: 1.2rem;}
+  [data-testid="stMetric"] {background: #161A22;}
+  button[data-baseweb="tab"] p {font-size: 1.02rem; font-weight: 600;}
+  [data-testid="stTabs"] {margin-top: 0.8rem;}
+  h3 {border-left: 4px solid #F2A541; padding-left: 0.6rem !important;}
   .footer {color: #8A8F98; font-size: 0.85rem; margin-top: 2rem; padding-top: 1rem;
            border-top: 1px solid rgba(255,255,255,0.08);}
   .footer a {color: #C9CCD1;}
@@ -104,7 +112,7 @@ model_hit = main_bt['model']['precision_top50']
 base_hit = main_bt['baseline_debut_rank']['precision_top50']
 
 # ---------------------------------------------------------------- header
-st.title('Hot 100 Breakout Radar')
+st.markdown('<h1 class="hero">Hot 100 <span class="accent">Breakout Radar</span></h1>', unsafe_allow_html=True)
 st.markdown('<p class="tagline">Spot the artists who are breaking out and the songs that could become hits next, '
             'using every Billboard Hot 100 chart since 1958.</p>', unsafe_allow_html=True)
 
@@ -132,14 +140,15 @@ A new artist or song quickly gaining popularity. Record labels' talent scouts (t
 ''')
 
 k1, k2, k3, k4 = st.columns(4)
-k1.metric('Latest chart week', fmt_date(counts['last']), border=True)
-k2.metric('New artists in the last 6 months', f'{len(breaking):,}', border=True)
-k3.metric('Songs that could break next', f'{len(watch):,}', border=True)
+k1.metric('Latest chart week', fmt_date(counts['last']), border=True, height=128)
+k2.metric('New artists in the last 6 months', f'{len(breaking):,}', border=True, height=128)
+k3.metric('Songs that could break next', f'{len(watch):,}', border=True, height=128)
 k4.metric('Past predictions that came true', f'{model_hit:.0%}',
-          f'vs. {base_hit:.0%} for a simple guess', delta_color='off', delta_arrow='off',
-          border=True, help='Of the 50 songs the model rated highest in a 2016-2025 test, the share that actually reached the top 10.')
+          f'vs. {base_hit:.0%} by rule of thumb', delta_color='off', delta_arrow='off',
+          border=True, height=128, help='Of the 50 songs the model rated highest in a 2016-2025 test, the share that actually reached the top 10.')
 
-tabs = st.tabs(['Breaking Now', 'Could Break Next', 'Artist Lookup', 'Song History', 'Does It Work?', 'How It Was Built'])
+tabs = st.tabs(['🔥 Breaking Now', '🔮 Could Break Next', '🎤 Artist Lookup', '📈 Song History', '✅ Does It Work?',
+               '🛠️ How It Was Built'])
 
 # ---------------------------------------------------------------- Breaking Now
 with tabs[0]:
@@ -215,7 +224,7 @@ with tabs[1]:
 # ---------------------------------------------------------------- Artist Lookup
 with tabs[2]:
     st.subheader('Look up any artist')
-    st.caption('See every Hot 100 song an artist has had, as the lead artist or as a featured guest. Many artists break '
+    st.caption('See every Hot 100 song an artist has had, as the lead artist or as a featured guest. Some artists break '
                'out by appearing as guests first, then landing hits of their own.')
     artists = q('SELECT artist FROM artists WHERE n_songs >= 2 ORDER BY n_songs DESC, artist')['artist'].tolist()
     who = st.selectbox('Choose or type an artist', artists, index=artists.index('Doja Cat') if 'Doja Cat' in artists else 0)
@@ -234,6 +243,9 @@ with tabs[2]:
                      labels={'debut_date': 'Year the song came out', 'peak_rank': 'Highest spot reached',
                              'song': 'Song', 'artist_credit': 'Credit', 'total_weeks': 'Weeks on chart'})
     fig.update_traces(marker=dict(line=dict(width=0), opacity=0.85))
+    start, end = pd.Timestamp(hist['debut_date'].min()), pd.Timestamp(counts['last'])
+    pad = max((end - start) * 0.03, pd.Timedelta(days=45))
+    fig.update_xaxes(range=[start - pad, end + pd.Timedelta(days=20)])   # stop at the latest chart, no empty future
     show(position_axis(style(fig, height=400)))
     st.caption('Each dot is one song. Higher dots reached better spots; bigger dots stayed on the chart longer. '
                'Hover over a dot for details.')
@@ -329,8 +341,8 @@ DuckDB (a fast database) by `pipeline.py`, and SQL queries in `sql/` build the s
 Exact duplicate rows in the source (the same song listed twice in one week) are removed.
 
 #### Telling artists apart
-Billboard writes credits as one line of text, which mixes groups ("Earth, Wind & Fire", "Tyler, The Creator") with
-collaborations ("Future & Metro Boomin"). Names after "Featuring" or "With" are counted as featured guests. A lead
+Billboard writes credits as one line of text, which mixes single acts whose names contain commas or "&" ("Earth, Wind & Fire", "Tyler, The
+Creator") with collaborations between separate artists ("Future & Metro Boomin"). Names after "Featuring" or "With" are counted as featured guests. A lead
 credit is split into separate artists only when at least half of the names also chart on their own and the rest look
 like full personal names. Otherwise it is treated as one act.
 
