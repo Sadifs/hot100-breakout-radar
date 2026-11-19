@@ -24,7 +24,8 @@ song's first 3 chart weeks and its lead artist's earlier chart record ranks them
 | 1990-2015 → 2016-2025 | 5,350 | 4.2% | **0.87** | 0.60 | **72%** vs. 12% |
 | Streaming era: 2013-2020 → 2021-2025 | 2,834 | 2.8% | **0.92** | 0.61 | **54%** vs. 10% |
 
-A song's height on the chart in week 3 and its most recent week-over-week climb carry the most signal.
+A song's height on the chart in week 3 carries the most signal, followed by its lead artist's track record and its
+most recent week-over-week climb.
 
 ## Data cleaning and identity resolution
 
@@ -44,8 +45,9 @@ days, and an artist's track record counts only songs that debuted before the son
 Result: 356,374 chart entries, 32,766 songs, 38,267 credits, and 8,873 artists; 4,604 songs credit two or more artists.
 
 Known limits: one-word guest names stay attached to the credit ("Drake, Don Toliver & Yebba"; for scoring, the song
-still uses Drake's track record), and duos whose members also chart solo are split ("Sonny & Cher"). Double-sided singles appear as Billboard printed
-them, so a song can show up both alone and as part of a pairing ("Something" and "Come Together/Something").
+still uses Drake's track record), and duos whose members also chart solo are split ("Sonny & Cher"). Double-sided
+singles appear as Billboard printed them, so a song can show up both alone and as part of a pairing ("Something" and
+"Come Together/Something").
 
 ## Project structure
 
