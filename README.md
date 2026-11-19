@@ -5,11 +5,14 @@ Billboard Hot 100 chart from August 1958 to November 2026.
 
 ## What it does
 
-- **Breaking Now:** artists whose first Hot 100 credit came in the last 26 chart weeks, with their best peak and this week's movement, plus the fastest climbers among songs 8 weeks old or younger.
-- **Watchlist:** recent songs that debuted outside the top 10, scored on their chance of climbing into it.
-- **Artist Lookup:** an artist's full credit history, split into lead and featured credits, to spot moves from features to lead releases.
-- **Song Trajectory:** the week-by-week chart path of any song, with gaps shown when it leaves the chart.
-- **Backtest and Methods:** how well early chart movement predicts a top-10 climb, and how the data was cleaned.
+Built so anyone can use it, with a 30-second guide for people new to the charts.
+
+- **Breaking Now:** artists whose first Hot 100 song arrived in the last 26 weeks, plus this week's fastest-rising songs.
+- **Could Break Next:** recent songs that debuted outside the top 10, with each one's trend and its chance of reaching the top 10.
+- **Artist Lookup:** every Hot 100 song for any artist, split into lead and featured-guest credits.
+- **Song History:** the week-by-week chart path of any song, with gaps shown when it leaves the chart.
+- **Does It Work?:** how often past predictions came true, in plain language, with full statistics for data-minded readers.
+- **How It Was Built:** data sources, cleaning rules, the model, and known limits.
 
 ## Key result
 
@@ -54,7 +57,7 @@ sql/backtest_features.sql   model features with no look-ahead
 sql/breaking_now.sql        artists whose first credit came in the last 26 weeks
 sql/climbers.sql            fastest climbers on the latest chart
 analysis.py                 time-split backtests, watchlist scores, breaking-now tables
-app.py                      Streamlit app
+app.py                      Streamlit app (.streamlit/config.toml sets the theme)
 tests/test_pipeline.py      credit-parser cases and database checks (pytest)
 ```
 

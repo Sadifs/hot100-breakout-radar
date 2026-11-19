@@ -26,4 +26,5 @@ SELECT s.song_id, s.song, s.artist_credit, s.lead_artist, s.debut_date, s.debut_
        COALESCE(h.prior_songs, 0) AS prior_songs, COALESCE(h.prior_top10, 0) AS prior_top10,
        s.has_feature, s.n_artists, s.reached_top10
 FROM songs s LEFT JOIN lead_hist h USING (song_id)
-ORDER BY s.song_id;   -- fixed row order so tied scores (e.g., equal debut positions) always rank the same way
+-- fixed row order so tied scores (e.g., equal debut positions) always rank the same way
+ORDER BY s.song_id;
